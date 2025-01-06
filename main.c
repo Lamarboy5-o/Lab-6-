@@ -4,12 +4,12 @@
 
 typedef struct student{
     int per_num;
-    char first_name[50];
-    char last_name[50];
-    char gender;
-    char program[50];
+    char* first_name;
+    char* last_name;
+    char* gender;
+    char* program;
     int age;
-    char email[100];
+    char* email;
 } student;
 
 typedef struct node{
@@ -22,7 +22,6 @@ typedef struct node{
 node *head = NULL; //head of the list, points to nothing at init
 
 void add_student(int per_num, char *first_name, char *last_name, char *gender, char *program, int age, char *email){ 
-
     node* new_node = (node*) malloc (sizeof(node));
 
     student* new_student  = (student*) malloc (sizeof(student));
@@ -58,17 +57,17 @@ void add_student(int per_num, char *first_name, char *last_name, char *gender, c
 
     new_student->per_num = per_num;
 
-    *new_student->first_name = first_name;
+    new_student->first_name = first_name;
 
-    *new_student->last_name = last_name;
+    new_student->last_name = last_name;
 
     new_student->gender = gender;
 
-    *new_student->program = program;
+    new_student->program = program;
 
     new_student->age = age;
 
-    *new_student->email = email;
+    new_student->email = email;
 
     printf("\n\n");
 
@@ -92,62 +91,42 @@ void add_student(int per_num, char *first_name, char *last_name, char *gender, c
 
     printf("\n"); */
 
-    return head; //returns the head pointer of the list
+   // return head; //returns the head pointer of the list
 }
 
 
-void modify_student(){
-/*
+void modify_student(int per_num){
+    node* temp = head;
 
-char temp_num[50];
-char temp_fname[50];
-char temp_lname[50];
-char temp_gender[50];
-char new_program[50];
-int new_age = 0;
-char new_lname[50];
-printf("Enter Student Personal Number: ");
-scanf("%s", &temp_num);
-
-for (int i = 0; i <student_index; i++){
-    if (db[i]->per_num == temp_num){
-        printf("Enter new personal number: ");
-        scanf("%s", &new_num);
-        db[i]->per_num = new_num;
-
-        printf("Enter First Name");
-        scanf("%s", &temp_fname);
-        db[i]->name = new_fname;
-
-        printf("Enter Last Name");
-        scanf("%s" , &temp_lname);
-        db[i]->name = new_fname;
-
-        printf("Enter gender");
-        scanf("%s" , temp_gender);
-        db[i]->name = new_fname;
-
-        printf("Enter program");
-        scanf("%s" , temp_program);
-        db[i]->name = new_fname;
-
-        printf("Enter age");
-        scanf("%d" , temp_age);
-        db[i]->name = new_fname;
-
-        printf("Enter email");
-        scanf("%s" , temp_email);
-        db[i]->name = new_fname;
-        
-        break;
+    if (temp->student == NULL);{
+        printf("No students in database");
+        return;
     }
-    else {
-        printf("No student found!");
+
+    while(temp != NULL){
+        if (temp->student->per_num == per_num){
+            printf("Enter new first name: ");
+            scanf("%s", &temp->student->first_name);
+            printf("Enter new last name: ");
+            scanf("%s", &temp->student->last_name);
+            printf("Enter new gender: ");
+            scanf("%s", &temp->student->gender);
+            printf("Enter new program: ");
+            scanf("%s", &temp->student->program);
+            printf("Enter new age: ");
+            scanf("%d", &temp->student->age);
+            printf("Enter new email: ");
+            scanf("%s", &temp->student->email);
+            return;
+        }
+        temp = temp->next;
     }
+    printf("Student not found!");
 }
 
-*/
-}
+
+
+
 
 
 void delete_student(){
@@ -306,12 +285,54 @@ The program ask the program by asking its code and let the user to modify inform
 }
 
 void exit_function(){
-    /*
-    The program sks to save the database. Then it will do the same actions in option 5 (Save) and then exits.
-    */
+    node* temp = head;
+    node* next_temp;
+    char choice1;
+    printf("Do you want to save database? y/n: ");
+    scanf("%s", &choice1);
+    if (choice1 == 'y'){
+        // Some code for file saving
+        // Some code for file saving
+        while(temp != NULL){ // Traverse through all nodes and free the one by one
+            next_temp = temp->next; // Since temp will be freed we must pre define the next node so that we can keep track of the nodes
+            free(temp->student);
+            temp = next_temp;
+        }
+        printf("Freed allocated memory, terminating program");
+        exit(0);
+    }
 
-    exit(0);
+    else if(choice1 == 'n'){
+        while(temp != NULL){
+        next_temp = temp->next;
+        free(temp->student);
+        temp = next_temp;
+        }
+        printf("Freed allocated memory, terminating program");
+        exit(0);
+    }
 
+    else {
+    printf("Please type either y or n");
+    exit_function();
+    }
+
+}
+
+void print_function(){
+    node* temp = head;
+    printf("-------------------------------------------------\n");
+    while (temp != NULL){
+        printf("Personal Number: %d\n", temp->student->per_num);
+        printf("First Name: %s\n", temp->student->first_name);
+        printf("Last Name: %s\n", temp->student->last_name);
+        printf("Gender: %s\n", temp->student->gender);
+        printf("Program: %s\n", temp->student->program);
+        printf("Age: %d\n", temp->student->age);
+        printf("Email: %s\n", temp->student->email);
+        getchar();
+        temp = temp->next;
+    }
 }
 
 int main(){
@@ -325,10 +346,10 @@ int age;
 char email[100];
     
 node * head = NULL;
-
+while(1){
 int choice = 0;
 
-printf("Enter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n 6. Load\n 7. Add program\n 8. Modify program\n 9. Exit\n");
+printf("Enter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n 6. Load\n 7. Add program\n 8. Modify program\n 9. Exit\n 10. Print\n");
 scanf("%d", &choice);
 
 switch (choice){
@@ -381,7 +402,11 @@ switch (choice){
     break; //A while loop could have been used here but a goto statement felt more readable and thus more fitting in this case
 
     case 2:
-        modify_student();
+
+        printf("Enter Personnummer: ");
+        scanf("%d", &per_num);
+
+        modify_student(per_num);
 
     break;
 
@@ -420,12 +445,15 @@ switch (choice){
     
     break;
 
-    main();
+    case 10:
+        print_function();
+    break;
 
     default:
-
+    main();
+    break;
+ }
 }
-
 //char *study_prg = &student.gender;
 
 
