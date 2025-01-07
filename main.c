@@ -292,13 +292,13 @@ void add_program(){
     }
 
     printf("Name of program: \n");
-    scanf("%s" , prog_n);
+    scanf("%s" , &prog_n);
     printf("Program code: \n");
-    scanf("%s" , prog_c);
+    scanf("%s" , &prog_c);
     printf("Name of program responsible: \n");
-    scanf("%s" , resp_n);
+    scanf("%s" , &resp_n);
     printf("Responsible email: \n");
-    scanf("%s" , resp_e);
+    scanf("%s" , &resp_e);
 /*
     prog_n = array_prog[counter].prog_name
     prog_c = array_prog[counter].prog_code
@@ -313,9 +313,38 @@ void add_program(){
 }
 
 void modify_program(){
-/*
-The program ask the program by asking its code and let the user to modify informations about the program
-*/
+    char name[50];
+    char prog_n1[50];
+    char prog_c1[10];
+    char resp_n1[50];   
+    char resp_e1[100];
+printf("Type in the program name: ");
+scanf("%s" , &name);
+
+for (int i = 0; i<counter; i++){
+    if (strcmp(array_prog[i].prog_name, name) == 0){
+        printf("Enter new program name: \n");
+        scanf("%s" , &prog_n1);
+        printf("Enter new program code: \n");
+        scanf("%s" , &prog_c1);
+        printf("Enter new program responsible: \n");
+        scanf("%s" , &resp_n1);
+        printf("Enter program responsible email: \n");
+        scanf("%s" , &resp_e1);
+
+        strcpy(array_prog[i].prog_name , prog_n1);
+        strcpy(array_prog[i].prog_code , prog_c1);
+        strcpy(array_prog[i].prog_resp , resp_n1);
+        strcpy(array_prog[i].resp_email , resp_e1);
+        
+        return;
+    }
+
+    else{
+        printf("Program not found\n");
+        return;
+    }
+}
 
 }
 
@@ -371,9 +400,10 @@ void print_function(){
 }
 
 void print_programs(){
+    printf("Amount of programs: %d\n" , counter);
     for(int i = 0; i<counter; i++){
         printf("-----------------------------------------\n");
-        printf("Program Name: %d\n", array_prog[i].prog_name);
+        printf("Program Name: %s\n", array_prog[i].prog_name);
         printf("Program code: %s\n", array_prog[i].prog_code);
         printf("Program responsible: %s\n", array_prog[i].prog_resp);
         printf("Responsible email: %s\n", array_prog[i].resp_email);
