@@ -12,11 +12,21 @@ typedef struct student{
     char* email;
 } student;
 
+typedef struct program{
+    char prog_name[50];
+    char prog_code[10];
+    char prog_resp[50];
+    char resp_email[100];    
+} program;
+
+int counter = 0;
+program array_prog[50]; // Create a static array of 50 program structs
+
 typedef struct node{
     student *student;
     struct node *next;
     struct node *prev;
-    
+   
 } node;
 
 node *head = NULL; //head of the list, points to nothing at init
@@ -57,17 +67,17 @@ void add_student(int per_num, char *first_name, char *last_name, char *gender, c
 
     new_student->per_num = per_num;
 
-    new_student->first_name = first_name;
+    new_student->first_name = strdup(first_name);
 
-    new_student->last_name = last_name;
+    new_student->last_name = strdup(last_name);
 
-    new_student->gender = gender;
+    new_student->gender = strdup(gender);
 
-    new_student->program = program;
+    new_student->program = strdup(program);
 
     new_student->age = age;
 
-    new_student->email = email;
+    new_student->email = strdup(email);
 
     printf("\n\n");
 
@@ -97,26 +107,27 @@ void add_student(int per_num, char *first_name, char *last_name, char *gender, c
 
 void modify_student(int per_num){
     node* temp = head;
-
+/*
     if (temp->student == NULL);{
         printf("No students in database");
         return;
     }
-
+*/
     while(temp != NULL){
         if (temp->student->per_num == per_num){
             printf("Enter new first name: ");
-            scanf("%s", &temp->student->first_name);
+            scanf("%s", temp->student->first_name);
             printf("Enter new last name: ");
-            scanf("%s", &temp->student->last_name);
+            scanf("%s", temp->student->last_name);
             printf("Enter new gender: ");
-            scanf("%s", &temp->student->gender);
+            scanf("%s", temp->student->gender);
             printf("Enter new program: ");
-            scanf("%s", &temp->student->program);
+            scanf("%s", temp->student->program);
             printf("Enter new age: ");
             scanf("%d", &temp->student->age);
             printf("Enter new email: ");
-            scanf("%s", &temp->student->email);
+            scanf("%s", temp->student->email);
+            getchar();
             return;
         }
         temp = temp->next;
@@ -270,11 +281,35 @@ in the database will be overwritten by the information from the file. Therefore 
 }
 
 void add_program(){
-/*
-The program asks for a file name and saves all information in the database into the file. If the file exits, it will be overwritten
-and if it does not exist it has to be created.
-*/
+    char prog_n[50];
+    char prog_c[10];
+    char resp_n[50];   
+    char resp_e[100];
 
+    if(counter > 50){
+        printf("Reached maximum program limit");
+        return;
+    }
+
+    printf("Name of program: \n");
+    scanf("%s" , prog_n);
+    printf("Program code: \n");
+    scanf("%s" , prog_c);
+    printf("Name of program responsible: \n");
+    scanf("%s" , resp_n);
+    printf("Responsible email: \n");
+    scanf("%s" , resp_e);
+/*
+    prog_n = array_prog[counter].prog_name
+    prog_c = array_prog[counter].prog_code
+    resp_n = array_prog[counter].prog_resp
+    resp_e = array_prog[counter].resp_email
+*/
+    strcpy(array_prog[counter].prog_name , prog_n);
+    strcpy(array_prog[counter].prog_code , prog_c);
+    strcpy(array_prog[counter].prog_resp , resp_n);
+    strcpy(array_prog[counter].resp_email , resp_e);
+    counter++;
 }
 
 void modify_program(){
@@ -330,8 +365,19 @@ void print_function(){
         printf("Program: %s\n", temp->student->program);
         printf("Age: %d\n", temp->student->age);
         printf("Email: %s\n", temp->student->email);
-        getchar();
+        printf("-------------------------------------------\n");
         temp = temp->next;
+    }
+}
+
+void print_programs(){
+    for(int i = 0; i<counter; i++){
+        printf("-----------------------------------------\n");
+        printf("Program Name: %d\n", array_prog[i].prog_name);
+        printf("Program code: %s\n", array_prog[i].prog_code);
+        printf("Program responsible: %s\n", array_prog[i].prog_resp);
+        printf("Responsible email: %s\n", array_prog[i].resp_email);
+        printf("-----------------------------------------\n");
     }
 }
 
@@ -349,7 +395,7 @@ node * head = NULL;
 while(1){
 int choice = 0;
 
-printf("Enter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n 6. Load\n 7. Add program\n 8. Modify program\n 9. Exit\n 10. Print\n");
+printf("Enter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n 6. Load\n 7. Add program\n 8. Modify program\n 9. Exit\n 10. Print Students\n 11. Print Programs\n");
 scanf("%d", &choice);
 
 switch (choice){
@@ -403,7 +449,7 @@ switch (choice){
 
     case 2:
 
-        printf("Enter Personnummer: ");
+        printf("Enter Personnummer: \n");
         scanf("%d", &per_num);
 
         modify_student(per_num);
@@ -447,6 +493,10 @@ switch (choice){
 
     case 10:
         print_function();
+    break;
+
+    case 11:
+        print_programs();
     break;
 
     default:
